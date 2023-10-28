@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include <Eigen/SparseCholesky>
 
 #include <geo/field/Seg2SDF.h>
@@ -9,24 +11,22 @@ static void extractSegBoundary(Mesh &mesh, const std::vector<int> &segs,
                                int requiredSeg,
                                std::vector<size_t> &boundaryVertices)
 {
-    mesh.require(Mesh::HalfEdgeStructure);
+    std::vector<int> in(mesh.nV(), 0);
+    std::vector<int> out(mesh.nV(), 0);
 
     boundaryVertices.clear();
 
-    for (size_t i = 0; i < mesh.nV(); ++i)
+    for (size_t i = 0; i < mesh.nF(); ++i)
     {
-        int in = 0, out = 0;
-        mesh.vertices[i].forEachFace(
-            [&](const Face *f)
-            {
-                if (segs[mesh.getFaceIndex(f)] == requiredSeg)
-                    in++;
-                else
-                    out++;
-                if (in > 0 && out > 0)
-                    boundaryVertices.push_back(i);
-            });
+        const auto &I = mesh.faces[i].indices;
+        bool b = segs[i] == requiredSeg;
+        for (int j = 0; j < 3; ++j)
+            b ? in[I(j)]++ : out[I(j)]++;
     }
+
+    for (size_t i = 0; i < mesh.nV(); ++i)
+        if (in[i] > 0 && out[i] > 0)
+            boundaryVertices.push_back(i);
 }
 
 void seg2SDF(Mesh &mesh, const std::vector<int> &segs, int requiredSeg,

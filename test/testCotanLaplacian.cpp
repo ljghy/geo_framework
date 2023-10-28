@@ -27,18 +27,16 @@ int main(int argc, char **argv)
                      .count()
               << " ms" << std::endl;
 
-    Eigen::MatrixX3d pos(mesh.nV(), 3);
-    for (size_t i = 0; i < mesh.nV(); ++i)
-        pos.row(i) = mesh.vertices[i].position;
-
-    Eigen::MatrixX3d H = L.selfadjointView<Eigen::Lower>() * pos;
+    Eigen::Matrix3Xd H =
+        mesh.getPositionMatrix() * L.selfadjointView<Eigen::Lower>();
 
     mesh.require(Mesh::VertexNormals);
     mesh.require(Mesh::VertexAreas);
     Eigen::VectorXd h(mesh.nV());
+
     for (size_t i = 0; i < mesh.nV(); ++i)
     {
-        h(i) = -0.5 * H.row(i).dot(mesh.vertices[i].normal) /
+        h(i) = -0.5 * H.col(i).dot(mesh.vertices[i].normal) /
                mesh.vertices[i].area;
     }
     writeMeshVertexScalarFieldToVtk(argv[2], mesh, h);

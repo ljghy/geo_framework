@@ -30,6 +30,9 @@ void Mesh::require(uint32_t requiredFlags)
             case 6:
                 computeMeanEdgeLength();
                 break;
+            case 7:
+                computeConnectionAngles();
+                break;
             }
         }
         requiredFlags >>= 1;

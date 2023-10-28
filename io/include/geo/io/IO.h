@@ -18,6 +18,10 @@ void writeMeshVertexScalarFieldToVtk(const std::string &filename,
                                      const Mesh &mesh,
                                      const Eigen::VectorXd &phi);
 
+void writeMeshVertexVectorFieldToVtk(const std::string &filename,
+                                     const Mesh &mesh,
+                                     const Eigen::Matrix3Xd &phi);
+
 void writeMeshFaceVectorFieldToVtk(const std::string &filename,
                                    const Mesh &mesh,
                                    const Eigen::Matrix3Xd &phi);

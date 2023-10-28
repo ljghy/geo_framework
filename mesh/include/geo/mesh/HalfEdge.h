@@ -14,6 +14,8 @@ struct HalfEdge
     HalfEdge *next = nullptr;
     Face *face = nullptr;
 
+    double connectionAngle;
+
     Eigen::Vector3d vec() const;
 };
 

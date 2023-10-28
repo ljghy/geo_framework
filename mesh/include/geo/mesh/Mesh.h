@@ -23,6 +23,8 @@ struct Mesh
         VertexAreas = 1 << 5,
 
         MeanEdgeLength = 1 << 6,
+
+        ConnectionAngles = 1 << 7,
     };
 
     uint32_t flags = 0;
@@ -42,7 +44,10 @@ struct Mesh
     void computeVertexNormals();
     void computeVertexAreas();
     void computeMeanEdgeLength();
+    void computeConnectionAngles();
 
+    Eigen::Matrix3Xd getPositionMatrix() const;
+    Eigen::Matrix3Xd getVertexNormalMatrix();
     Eigen::VectorXd getVertexMassVector();
 
     size_t nV() const { return vertices.size(); }

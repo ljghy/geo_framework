@@ -5,6 +5,7 @@ set(TESTS
     testDivergence
     testHeatGeodesic
     testSeg2SDF
+    testConnectionLaplacian
 )
 
 foreach(test ${TESTS})
