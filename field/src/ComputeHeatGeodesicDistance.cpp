@@ -1,14 +1,13 @@
 #include <Eigen/SparseCholesky>
 
 #include <geo/numeric/nsqp.h>
-#include <geo/field/ComputeHeatGeodesicDistance.h>
+#include <geo/field/HeatGeodesicDistance.h>
 #include <geo/field/Gradient.h>
 #include <geo/field/Divergence.h>
 #include <geo/field/CotanLaplacian.h>
 
-void computeHeatGeodesicDistance(Mesh &mesh,
-                                 const std::vector<size_t> &sourceVertices,
-                                 Eigen::VectorXd &phi)
+void heatGeodesicDistance(Mesh &mesh, const std::vector<size_t> &sourceVertices,
+                          Eigen::VectorXd &phi)
 {
     mesh.require(Mesh::VertexAreas | Mesh::MeanEdgeLength);
 
@@ -40,9 +39,9 @@ void computeHeatGeodesicDistance(Mesh &mesh,
     phi = chol.compute(L).solve(-div);
 }
 
-void computeHeatGeodesicDistance(
-    Mesh &mesh, const std::vector<PointEmbedding> &sourcePoints,
-    Eigen::VectorXd &phi)
+void heatGeodesicDistance(Mesh &mesh,
+                          const std::vector<PointEmbedding> &sourcePoints,
+                          Eigen::VectorXd &phi)
 {
     mesh.require(Mesh::VertexAreas | Mesh::MeanEdgeLength);
 

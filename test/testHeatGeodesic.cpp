@@ -2,7 +2,7 @@
 #include <chrono>
 
 #include <geo/io/IO.h>
-#include <geo/field/ComputeHeatGeodesicDistance.h>
+#include <geo/field/HeatGeodesicDistance.h>
 
 int main(int argc, char **argv)
 {
@@ -20,7 +20,7 @@ int main(int argc, char **argv)
         std::chrono::high_resolution_clock::now();
 
     Eigen::VectorXd phi;
-    computeHeatGeodesicDistance(mesh,
+    heatGeodesicDistance(mesh,
                                 {{&mesh.faces[0], {0.5, 0.25, 0.25}},
                                  {&mesh.faces[100], {0.3, 0.3, 0.4}}},
                                 phi);
