@@ -21,12 +21,13 @@ int main(int argc, char **argv)
 
     std::chrono::high_resolution_clock::time_point t1 =
         std::chrono::high_resolution_clock::now();
-    int n = 1;
+
+    int n = 3;
     Eigen::SparseMatrix<std::complex<double>> L;
-    connectionLaplacian(mesh, L, n);
+    connectionLaplacian<Eigen::Lower>(mesh, L, n);
 
     Eigen::VectorXcd phase;
-    hermitianInversePowerIteration(L, &phase);
+    hermitianInversePowerIteration<Eigen::Lower>(L, &phase);
 
     Eigen::Matrix3Xd dir(3, mesh.nV());
     for (size_t i = 0; i < mesh.nV(); ++i)

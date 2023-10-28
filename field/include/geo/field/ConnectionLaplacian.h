@@ -10,9 +10,11 @@
 
 #include <geo/mesh/Mesh.h>
 
-template <bool Lower = true, typename SparseType>
+template <unsigned int UpLo = Eigen::Lower, typename SparseType>
 inline void connectionLaplacian(Mesh &mesh, SparseType &L, int n = 1)
 {
+    constexpr bool lo = UpLo == Eigen::Lower;
+
     assert(n >= 1);
 
     mesh.require(Mesh::FaceAngles | Mesh::ConnectionAngles);
@@ -30,10 +32,15 @@ inline void connectionLaplacian(Mesh &mesh, SparseType &L, int n = 1)
 
             const auto &I = face.indices;
 
-            const HalfEdge *he[3]{
-                I(1) > I(2) ? face.he->next : face.he->next->twin,
-                I(2) > I(0) ? face.he->prev : face.he->prev->twin,
-                I(0) > I(1) ? face.he : face.he->twin};
+            const HalfEdge *he[3]{(lo && I(1) > I(2)) || (!lo && I(1) < I(2))
+                                      ? face.he->next
+                                      : face.he->next->twin,
+                                  (lo && I(2) > I(0)) || (!lo && I(2) < I(0))
+                                      ? face.he->prev
+                                      : face.he->prev->twin,
+                                  (lo && I(0) > I(1)) || (!lo && I(0) < I(1))
+                                      ? face.he
+                                      : face.he->twin};
 
             size_t offset = mesh.getFaceIndex(&face);
             int i = 0;
@@ -45,7 +52,7 @@ inline void connectionLaplacian(Mesh &mesh, SparseType &L, int n = 1)
                             I(j), I(j),
                             -0.5 * (cot[(j + 1) % 3] + cot[(j + 2) % 3])};
                     }
-                    else if ((Lower && I(j) > I(k)) || (!Lower && I(j) < I(k)))
+                    else if ((lo && I(j) > I(k)) || (!lo && I(j) < I(k)))
                     {
                         int l = 3 - j - k;
                         std::complex<double> r =

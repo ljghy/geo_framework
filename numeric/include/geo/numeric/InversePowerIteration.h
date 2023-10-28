@@ -5,7 +5,7 @@
 #include <Eigen/SparseCore>
 #include <Eigen/SparseCholesky>
 
-template <typename ScalarType, unsigned int UpLo = Eigen::Lower>
+template <unsigned int UpLo = Eigen::Lower, typename ScalarType>
 void hermitianInversePowerIteration(
     const Eigen::SparseMatrix<ScalarType> &A,
     Eigen::Vector<ScalarType, Eigen::Dynamic> *x = nullptr,

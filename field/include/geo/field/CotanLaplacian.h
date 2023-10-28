@@ -7,9 +7,11 @@
 
 #include <geo/mesh/Mesh.h>
 
-template <bool Lower = true, typename SparseType>
+template <unsigned int UpLo = Eigen::Lower, typename SparseType>
 inline void cotanLaplacian(Mesh &mesh, SparseType &L)
 {
+    constexpr bool lo = UpLo == Eigen::Lower;
+
     mesh.require(Mesh::FaceAngles);
 
     std::vector<Eigen::Triplet<double>> triplets;
@@ -35,7 +37,7 @@ inline void cotanLaplacian(Mesh &mesh, SparseType &L)
                             I(j), I(j),
                             -0.5 * (cot[(j + 1) % 3] + cot[(j + 2) % 3])};
                     }
-                    else if ((Lower && I(j) > I(k)) || (!Lower && I(j) < I(k)))
+                    else if ((lo && I(j) > I(k)) || (!lo && I(j) < I(k)))
                     {
                         int l = 3 - j - k;
                         triplets[6 * offset + (i++)] = {I(j), I(k),
