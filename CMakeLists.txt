@@ -40,7 +40,7 @@ include(CMakePackageConfigHelpers)
 configure_package_config_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Config.cmake.in"
   "${CMAKE_CURRENT_BINARY_DIR}/geo_framework-config.cmake"
-  INSTALL_DESTINATION lib/cmake/geo_framework
+  INSTALL_DESTINATION lib/cmake/geo_framework-${PROJECT_VERSION}
   NO_SET_AND_CHECK_MACRO
   NO_CHECK_REQUIRED_COMPONENTS_MACRO
 )
