@@ -1,15 +1,17 @@
-#include <cassert>
+#include <iostream>
+#include <chrono>
+#include <fstream>
+#include <sstream>
 
 #include <Eigen/SparseCholesky>
 
-#include <geo/field/Seg2SDF.h>
+#include <geo/io/IO.h>
 #include <geo/field/Gradient.h>
 #include <geo/field/Divergence.h>
 #include <geo/field/CotanLaplacian.h>
 
-static void extractSegBoundary(Mesh &mesh, const std::vector<int> &segs,
-                               int requiredSeg,
-                               std::vector<size_t> &boundaryVertices)
+void extractSegBoundary(Mesh &mesh, const std::vector<int> &segs,
+                        int requiredSeg, std::vector<size_t> &boundaryVertices)
 {
     std::vector<int> in(mesh.nV(), 0);
     std::vector<int> out(mesh.nV(), 0);
@@ -29,9 +31,38 @@ static void extractSegBoundary(Mesh &mesh, const std::vector<int> &segs,
             boundaryVertices.push_back(i);
 }
 
-void seg2SDF(Mesh &mesh, const std::vector<int> &segs, int requiredSeg,
-             Eigen::VectorXd &phi)
+int main(int argc, char **argv)
 {
+    if (argc != 5)
+    {
+        std::cout << "Usage: " << argv[0]
+                  << " mesh.vtk seg.seg required_seg output.vtk" << std::endl;
+        return 0;
+    }
+
+    Mesh mesh;
+    loadMeshFromVtk(argv[1], mesh);
+
+    std::ifstream fin(argv[2]);
+    if (!fin)
+    {
+        std::cerr << "Failed to open file " << argv[2] << '\n';
+        return 1;
+    }
+
+    std::vector<int> segs(mesh.nF());
+    for (size_t i = 0; i < mesh.nF(); ++i)
+        fin >> segs[i];
+
+    std::stringstream ss(argv[3]);
+    int requiredSeg;
+    ss >> requiredSeg;
+
+    std::chrono::high_resolution_clock::time_point t1 =
+        std::chrono::high_resolution_clock::now();
+
+    Eigen::VectorXd phi;
+
     mesh.require(Mesh::VertexAreas | Mesh::MeanEdgeLength);
 
     std::vector<size_t> sourceVertices;
@@ -66,4 +97,15 @@ void seg2SDF(Mesh &mesh, const std::vector<int> &segs, int requiredSeg,
     L.prune([&rhs](int i, int j, double)
             { return (rhs(i) < 0.5 && rhs(j) < 0.5) || i == j; });
     phi = chol.compute(L).solve(-div);
+
+    std::chrono::high_resolution_clock::time_point t2 =
+        std::chrono::high_resolution_clock::now();
+    std::cout << "Converted mesh segmentation to SDF in "
+              << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1)
+                     .count()
+              << " ms" << std::endl;
+
+    writeMeshVertexScalarFieldToVtk(argv[4], mesh, phi);
+
+    return 0;
 }

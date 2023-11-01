@@ -17,16 +17,15 @@ else() # GCC
     add_compile_options(-Wall -Wextra -fPIC)
 endif()
 
-# add_subdirectory(acc)
 add_subdirectory(numeric)
 add_subdirectory(mesh)
 add_subdirectory(io)
 add_subdirectory(field)
 
-option(GEO_FRAMEWORK_BUILD_TESTS "Build tests" OFF)
+option(GEO_FRAMEWORK_BUILD_EXAMPLES "Build examples" ON)
 
-if (GEO_FRAMEWORK_BUILD_TESTS)
-    add_subdirectory(test)
+if (GEO_FRAMEWORK_BUILD_EXAMPLES)
+    add_subdirectory(examples)
 endif()
 
 install(EXPORT geo_framework-targets

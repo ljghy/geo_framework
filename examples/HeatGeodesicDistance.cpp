@@ -21,9 +21,9 @@ int main(int argc, char **argv)
 
     Eigen::VectorXd phi;
     heatGeodesicDistance(mesh,
-                                {{&mesh.faces[0], {0.5, 0.25, 0.25}},
-                                 {&mesh.faces[100], {0.3, 0.3, 0.4}}},
-                                phi);
+                         {{&mesh.faces[0], {0.5, 0.25, 0.25}},
+                          {&mesh.faces[100], {0.3, 0.3, 0.4}}},
+                         phi);
 
     std::chrono::high_resolution_clock::time_point t2 =
         std::chrono::high_resolution_clock::now();
