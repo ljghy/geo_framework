@@ -25,6 +25,9 @@ struct Mesh
         MeanEdgeLength = 1 << 6,
 
         ConnectionAngles = 1 << 7,
+
+        VertexIndices = 1 << 8,
+        FaceIndices = 1 << 9,
     };
 
     uint32_t flags = 0;
@@ -45,6 +48,8 @@ struct Mesh
     void computeVertexAreas();
     void computeMeanEdgeLength();
     void computeConnectionAngles();
+    void setVertexIndices();
+    void setFaceIndices();
 
     Eigen::Matrix3Xd getPositionMatrix() const;
     Eigen::Matrix3Xd getVertexNormalMatrix();

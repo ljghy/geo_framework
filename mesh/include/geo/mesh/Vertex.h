@@ -12,6 +12,8 @@ struct Vertex
 {
     HalfEdge *he;
 
+    size_t index;
+
     Eigen::Vector3d position;
     Eigen::Vector3d normal;
 

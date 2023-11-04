@@ -10,6 +10,8 @@ struct Face
 {
     HalfEdge *he; // from v0 to v1
 
+    size_t index;
+
     Eigen::Vector3i indices;
     Eigen::Vector3d normal;
     Eigen::Vector3d angles;

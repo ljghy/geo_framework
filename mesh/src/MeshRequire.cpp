@@ -33,6 +33,12 @@ void Mesh::require(uint32_t requiredFlags)
             case 7:
                 computeConnectionAngles();
                 break;
+            case 8:
+                setVertexIndices();
+                break;
+            case 9:
+                setFaceIndices();
+                break;
             }
         }
         requiredFlags >>= 1;
