@@ -9,4 +9,6 @@
 void computeGradient(Mesh &mesh, const Eigen::VectorXd &phi,
                      Eigen::Matrix3Xd &g);
 
+std::vector<Eigen::Matrix3d> gradientOperator(Mesh &mesh);
+
 #endif
