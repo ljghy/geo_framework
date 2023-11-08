@@ -29,4 +29,7 @@ void writeMeshFaceVectorFieldToVtk(const std::string &filename,
 void writeCurveToVtk(const std::string &filename,
                      const std::vector<Eigen::Vector3d> &vertices, bool isLoop);
 
+void writeVerticesToVtk(const std::string &filename,
+                        const std::vector<Eigen::Vector3d> &vertices);
+
 #endif
