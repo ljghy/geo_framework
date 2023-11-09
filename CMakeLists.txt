@@ -4,9 +4,14 @@ project(geo_framework VERSION 0.0.1 LANGUAGES CXX)
 
 set(CMAKE_DEBUG_POSTFIX d)
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib/geo_framework-${PROJECT_VERSION}")
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
+endif()
+
+if (NOT BUILD_SHARED_LIBS)
+    set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
 endif()
 
 set(CMAKE_CXX_STANDARD 20)
@@ -21,6 +26,7 @@ add_subdirectory(numeric)
 add_subdirectory(mesh)
 add_subdirectory(io)
 add_subdirectory(field)
+add_subdirectory(viewer)
 
 option(GEO_FRAMEWORK_BUILD_EXAMPLES "Build examples" ON)
 
