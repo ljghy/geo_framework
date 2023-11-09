@@ -69,7 +69,6 @@ find_package(opengl_framework REQUIRED)
 target_link_libraries(geo_viewer
 PUBLIC
     imgui
-PRIVATE
     glm::glm
     opengl_framework::opengl_framework
 )
