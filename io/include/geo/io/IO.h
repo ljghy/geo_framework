@@ -7,7 +7,14 @@
 
 #include <geo/mesh/Mesh.h>
 
+#include <geo/io/tiny_obj_loader.h>
+
 void loadMeshFromVtk(const std::string &filename, Mesh &mesh);
+
+void loadMeshFromObj(const std::string &filename, Mesh &mesh);
+
+void loadVerticesFromObj(const std::string &filename,
+                         Eigen::Matrix3Xd &vertices);
 
 void writeMeshToVtk(const std::string &filename, const Mesh &mesh);
 

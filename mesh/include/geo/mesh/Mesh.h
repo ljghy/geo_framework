@@ -51,7 +51,10 @@ struct Mesh
     void setVertexIndices();
     void setFaceIndices();
 
-    Eigen::Matrix3Xd getPositionMatrix() const;
+    Eigen::Matrix3Xd getVertexPositionMatrix() const;
+    Eigen::MatrixX3d getVertexPositionMatrixTransposed() const;
+    Eigen::Matrix3Xi getFaceIndicesMatrix() const;
+    Eigen::MatrixX3i getFaceIndicesMatrixTransposed() const;
     Eigen::Matrix3Xd getVertexNormalMatrix();
     Eigen::VectorXd getVertexMassVector();
 
