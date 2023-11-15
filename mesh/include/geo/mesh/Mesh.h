@@ -58,6 +58,9 @@ struct Mesh
     Eigen::Matrix3Xd getVertexNormalMatrix();
     Eigen::VectorXd getVertexMassVector();
 
+    std::vector<std::vector<int>> getVertexOneRing();
+    std::vector<std::vector<int>> getVertexOneRingWithCenter();
+
     size_t nV() const { return vertices.size(); }
     size_t nF() const { return faces.size(); }
 
