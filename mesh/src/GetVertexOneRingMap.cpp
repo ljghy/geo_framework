@@ -9,7 +9,7 @@ std::vector<std::map<int, int>> Mesh::getVertexOneRingMap()
         int i = vert.index;
         int j = 0;
         vert.forEachHalfEdge([&oneRingMap, i, &j](const HalfEdge *he)
-                             { oneRingMap[i][j++] = he->twin->origin->index; });
+                             { oneRingMap[i][he->twin->origin->index] = j++; });
     }
     return oneRingMap;
 }
@@ -22,9 +22,9 @@ std::vector<std::map<int, int>> Mesh::getVertexOneRingMapWithCenter()
     {
         int i = vert.index;
         int j = 1;
-        oneRingMap[i][0] = i;
+        oneRingMap[i][i] = 0;
         vert.forEachHalfEdge([&oneRingMap, i, &j](const HalfEdge *he)
-                             { oneRingMap[i][j++] = he->twin->origin->index; });
+                             { oneRingMap[i][he->twin->origin->index] = j++; });
     }
     return oneRingMap;
 }
