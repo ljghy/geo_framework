@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <map>
 #include <cstdint>
 
 #include <geo/mesh/Face.h>
@@ -60,6 +61,8 @@ struct Mesh
 
     std::vector<std::vector<int>> getVertexOneRing();
     std::vector<std::vector<int>> getVertexOneRingWithCenter();
+    std::vector<std::map<int, int>> getVertexOneRingMap();
+    std::vector<std::map<int, int>> getVertexOneRingMapWithCenter();
 
     size_t nV() const { return vertices.size(); }
     size_t nF() const { return faces.size(); }
