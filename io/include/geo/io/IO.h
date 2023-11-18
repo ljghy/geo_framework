@@ -9,6 +9,8 @@
 
 #include <geo/io/tiny_obj_loader.h>
 
+void loadMeshFromFile(const std::string &filename, Mesh &mesh);
+
 void loadMeshFromVtk(const std::string &filename, Mesh &mesh);
 
 void loadMeshFromObj(const std::string &filename, Mesh &mesh);
