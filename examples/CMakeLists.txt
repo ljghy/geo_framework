@@ -4,6 +4,8 @@ set(EXAMPLES
     Seg2SDF
     SmoothKVectorField
     BasicViewer
+    SubMesh
+    LargestComponent
 )
 
 find_package(opengl_framework REQUIRED)

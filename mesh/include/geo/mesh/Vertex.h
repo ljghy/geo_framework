@@ -10,9 +10,16 @@ struct Face;
 
 struct Vertex
 {
-    HalfEdge *he;
+    Vertex() = default;
 
-    int index;
+    Vertex(const Eigen::Vector3d &p)
+        : position(p)
+    {
+    }
+
+    HalfEdge *he = nullptr;
+
+    int index = -1;
 
     Eigen::Vector3d position;
     Eigen::Vector3d normal;

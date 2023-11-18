@@ -8,9 +8,16 @@ struct HalfEdge;
 
 struct Face
 {
-    HalfEdge *he; // from v0 to v1
+    Face() = default;
 
-    int index;
+    Face(const Eigen::Vector3i &i)
+        : indices(i)
+    {
+    }
+
+    HalfEdge *he = nullptr; // from v0 to v1
+
+    int index = -1;
 
     Eigen::Vector3i indices;
     Eigen::Vector3d normal;
