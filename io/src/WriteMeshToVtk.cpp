@@ -3,7 +3,7 @@
 
 #include <geo/io/IO.h>
 
-void writeMeshToVtk(const std::string &filename, Mesh &mesh)
+void writeMeshToVtk(const std::string &filename, const Mesh &mesh)
 {
     std::ofstream fout(filename);
     if (!fout)
