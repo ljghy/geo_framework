@@ -34,7 +34,7 @@ std::vector<Eigen::VectorXd> cotanVectors(Mesh &mesh)
                 {
                     int k =
                         f2->indices(0) == i ? 0 : (f2->indices(1) == i ? 1 : 2);
-                    cots[i](j) += 0.5 / std::tan(f2->angles[(k + 2) % 3]);
+                    cots[i](j) += 0.5 / std::tan(f2->angles[(k + 1) % 3]);
                 }
                 cots[i](0) -= cots[i](j);
             });
