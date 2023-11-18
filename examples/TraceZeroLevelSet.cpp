@@ -7,7 +7,7 @@ int main(int argc, char **argv)
 {
     if (argc != 3)
     {
-        std::cout << "Usage: " << argv[0] << " mesh.vtk phi.vtk" << std::endl;
+        std::cout << "Usage: " << argv[0] << " mesh.vtk curve.vtk" << std::endl;
         return 0;
     }
 
@@ -19,12 +19,12 @@ int main(int argc, char **argv)
     std::cout << "Components: " << result.size() << std::endl;
     for (const auto &r : result)
     {
-        std::cout << "Loop: " << r.isLoop << ", Vertices: " << r.vertices.size()
-                  << std::endl;
+        std::cout << "Loop: " << r->isLoop
+                  << ", Vertices: " << r->vertices.size() << std::endl;
     }
     if (!result.empty())
     {
         int idx = 0;
-        writeCurveToVtk(argv[2], result[idx].vertices, result[idx].isLoop);
+        writeCurveToVtk(argv[2], result[idx]->vertices, result[idx]->isLoop);
     }
 }

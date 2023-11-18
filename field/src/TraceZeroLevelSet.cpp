@@ -36,11 +36,11 @@ static Eigen::VectorXd pushOutSDF(const Mesh &mesh, const Eigen::VectorXd &phi,
     return phiPushedOut;
 }
 
-static std::vector<Curve>
+static std::vector<std::shared_ptr<Curve>>
 splitCurves(const std::vector<Eigen::Vector3d> &vertices,
             std::vector<std::array<int, 2>> &indexMapping, double dupThreshold)
 {
-    std::vector<Curve> ret;
+    std::vector<std::shared_ptr<Curve>> ret;
     while (true)
     {
         int j = -1;
@@ -55,19 +55,19 @@ splitCurves(const std::vector<Eigen::Vector3d> &vertices,
         if (j == -1)
             break;
 
-        auto &result = ret.emplace_back();
+        auto &result = ret.emplace_back(new Curve);
 
         int start = j;
         int p = indexMapping[j][0] == -1;
         int k = indexMapping[j][p];
         indexMapping[j][p] = -1;
 
-        result.vertices.emplace_back(vertices[j]);
+        result->vertices.emplace_back(vertices[j]);
 
         while (k != start && k != -1)
         {
             if ((vertices[k] - vertices[j]).norm() > dupThreshold)
-                result.vertices.emplace_back(vertices[k]);
+                result->vertices.emplace_back(vertices[k]);
 
             p = indexMapping[k][0] == j;
             int l = indexMapping[k][p];
@@ -78,8 +78,8 @@ splitCurves(const std::vector<Eigen::Vector3d> &vertices,
 
         if (k == -1)
         {
-            result.isLoop = false;
-            std::reverse(result.vertices.begin(), result.vertices.end());
+            result->isLoop = false;
+            std::reverse(result->vertices.begin(), result->vertices.end());
             j = start;
             p = indexMapping[j][0] == -1;
             k = indexMapping[j][p];
@@ -87,7 +87,7 @@ splitCurves(const std::vector<Eigen::Vector3d> &vertices,
             while (k != -1)
             {
                 if ((vertices[k] - vertices[j]).norm() > dupThreshold)
-                    result.vertices.emplace_back(vertices[k]);
+                    result->vertices.emplace_back(vertices[k]);
 
                 p = indexMapping[k][0] == j;
                 int l = indexMapping[k][p];
@@ -98,7 +98,7 @@ splitCurves(const std::vector<Eigen::Vector3d> &vertices,
         }
         else
         {
-            result.isLoop = true;
+            result->isLoop = true;
             indexMapping[start][0] = indexMapping[start][1] = -1;
         }
     }
@@ -106,8 +106,8 @@ splitCurves(const std::vector<Eigen::Vector3d> &vertices,
     return ret;
 }
 
-std::vector<Curve> traceZeroLevelSet(Mesh &mesh, const Eigen::VectorXd &phi,
-                                     double dupThreshold)
+std::vector<std::shared_ptr<Curve>>
+traceZeroLevelSet(Mesh &mesh, const Eigen::VectorXd &phi, double dupThreshold)
 {
     mesh.require(Mesh::HalfEdgeStructure);
 
