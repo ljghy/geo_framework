@@ -1,5 +1,15 @@
 #include <geo/mesh/Mesh.h>
 
+using RequireFunc = void (Mesh::*)();
+
+static RequireFunc requireFuncMap[]{
+    &Mesh::constructHalfEdge,     &Mesh::computeFaceAngles,
+    &Mesh::computeFaceNormals,    &Mesh::computeFaceAreas,
+    &Mesh::computeVertexNormals,  &Mesh::computeVertexAreas,
+    &Mesh::computeMeanEdgeLength, &Mesh::computeConnectionAngles,
+    &Mesh::setVertexIndices,      &Mesh::setFaceIndices,
+};
+
 void Mesh::require(uint32_t requiredFlags)
 {
     int i = 0;
@@ -7,39 +17,8 @@ void Mesh::require(uint32_t requiredFlags)
     {
         if ((requiredFlags & 1) && !(flags & (1 << i)))
         {
-            switch (i)
-            {
-            case 0:
-                constructHalfEdge();
-                break;
-            case 1:
-                computeFaceAngles();
-                break;
-            case 2:
-                computeFaceNormals();
-                break;
-            case 3:
-                computeFaceAreas();
-                break;
-            case 4:
-                computeVertexNormals();
-                break;
-            case 5:
-                computeVertexAreas();
-                break;
-            case 6:
-                computeMeanEdgeLength();
-                break;
-            case 7:
-                computeConnectionAngles();
-                break;
-            case 8:
-                setVertexIndices();
-                break;
-            case 9:
-                setFaceIndices();
-                break;
-            }
+            (this->*requireFuncMap[i])();
+            flags |= (1 << i);
         }
         requiredFlags >>= 1;
         ++i;
