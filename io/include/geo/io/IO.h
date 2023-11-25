@@ -27,7 +27,11 @@ void loadMeshFromObj(const std::string &filename, Eigen::Matrix3Xd &V,
 void loadVerticesFromObj(const std::string &filename,
                          Eigen::Matrix3Xd &vertices);
 
+void writeMeshToFile(const std::string &filename, const Mesh &mesh);
+
 void writeMeshToVtk(const std::string &filename, const Mesh &mesh);
+
+void writeMeshToObj(const std::string &filename, const Mesh &mesh);
 
 void loadMeshVertexScalarFieldFromVtk(const std::string &filename, Mesh &mesh,
                                       Eigen::VectorXd &phi);
