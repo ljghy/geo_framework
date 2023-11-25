@@ -12,7 +12,28 @@
 
 struct Mesh
 {
-    enum MeshBitFlag : uint32_t
+    Mesh() = default;
+
+    template <typename DerivedV, typename DerivedF>
+    Mesh(const Eigen::MatrixBase<DerivedV> &V,
+         const Eigen::MatrixBase<DerivedF> &F)
+    {
+        vertices.reserve(V.rows());
+        for (int i = 0; i < V.rows(); ++i)
+        {
+            vertices.emplace_back(V.row(i));
+        }
+
+        faces.reserve(F.rows());
+        for (int i = 0; i < F.rows(); ++i)
+        {
+            faces.emplace_back(F.row(i));
+        }
+    }
+
+    using MeshBitFlag = uint32_t;
+
+    enum MeshBitFlag_ : MeshBitFlag
     {
         HalfEdgeStructure = 1 << 0,
 
@@ -31,7 +52,7 @@ struct Mesh
         FaceIndices = 1 << 9,
     };
 
-    uint32_t flags = 0;
+    MeshBitFlag flags = 0;
 
     std::vector<Vertex> vertices;
     std::vector<Face> faces;
@@ -39,7 +60,7 @@ struct Mesh
 
     double meanEdgeLength;
 
-    void require(uint32_t flags);
+    void require(MeshBitFlag flags);
 
     void constructHalfEdge();
     void computeFaceAngles();
@@ -54,8 +75,10 @@ struct Mesh
 
     Eigen::Matrix3Xd getVertexPositionMatrix() const;
     Eigen::MatrixX3d getVertexPositionMatrixTransposed() const;
+    Eigen::MatrixX3d getVMatrix() const;
     Eigen::Matrix3Xi getFaceIndicesMatrix() const;
     Eigen::MatrixX3i getFaceIndicesMatrixTransposed() const;
+    Eigen::MatrixX3i getFMatrix() const;
     Eigen::Matrix3Xd getVertexNormalMatrix();
     Eigen::VectorXd getVertexMassVector();
 

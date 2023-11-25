@@ -10,7 +10,7 @@ static RequireFunc requireFuncMap[]{
     &Mesh::setVertexIndices,      &Mesh::setFaceIndices,
 };
 
-void Mesh::require(uint32_t requiredFlags)
+void Mesh::require(MeshBitFlag requiredFlags)
 {
     int i = 0;
     while (requiredFlags)

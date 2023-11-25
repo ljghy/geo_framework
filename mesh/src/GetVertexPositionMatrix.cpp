@@ -15,3 +15,8 @@ Eigen::MatrixX3d Mesh::getVertexPositionMatrixTransposed() const
         P.row(i) = vertices[i].position;
     return P;
 }
+
+Eigen::MatrixX3d Mesh::getVMatrix() const
+{
+    return getVertexPositionMatrixTransposed();
+}

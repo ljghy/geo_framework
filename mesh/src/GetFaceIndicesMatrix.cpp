@@ -15,3 +15,8 @@ Eigen::MatrixX3i Mesh::getFaceIndicesMatrixTransposed() const
         F.row(i) = faces[i].indices;
     return F;
 }
+
+Eigen::MatrixX3i Mesh::getFMatrix() const
+{
+    return getFaceIndicesMatrixTransposed();
+}
