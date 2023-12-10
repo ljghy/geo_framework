@@ -19,3 +19,19 @@ std::vector<FaceMetric> computeFaceMetrics(const Mesh &mesh)
     }
     return faceMetrics;
 }
+
+std::vector<FaceMetric> computeIntrinsicFaceMetrics(const Mesh &mesh,
+                                                    const Eigen::MatrixX3d &l)
+{
+    std::vector<FaceMetric> faceMetrics(mesh.nF());
+    for (size_t i = 0; i < mesh.nF(); ++i)
+    {
+        double a = l(i, 2);
+        double b = l(i, 1);
+        double c = std::clamp(
+            (a * a + b * b - l(i, 0) * l(i, 0)) / (2.0 * a * b), -1.0, 1.0);
+        double s = std::sqrt(1.0 - c * c);
+        faceMetrics[i].U << a, b * c, 0, b * s;
+    }
+    return faceMetrics;
+}

@@ -41,4 +41,6 @@ struct FaceMetric
 
 std::vector<FaceMetric> computeFaceMetrics(const Mesh &mesh);
 
+std::vector<FaceMetric> computeIntrinsicFaceMetrics(const Mesh &mesh,
+                                                    const Eigen::MatrixX3d &l);
 #endif
