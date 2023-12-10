@@ -8,26 +8,30 @@
 #include <Eigen/SparseCore>
 #include <Eigen/SparseCholesky>
 
-template <typename CholType>
+template <typename CholType,
+          typename ColContainer = std::unordered_map<int, double>>
 class SparseSymmetricInverseSolver
 {
 public:
     SparseSymmetricInverseSolver(const CholType &chol);
 
     void compute();
-    double get(int i, int j) const;
+    double get(int i, int j);
     int nnz() const { return L.nonZeros(); }
+
+private:
+    double getInternal(int i, int j);
 
 private:
     Eigen::SparseMatrix<double> L;
     Eigen::VectorXd d;
     Eigen::PermutationMatrix<Eigen::Dynamic> P;
-    std::vector<std::unordered_map<int, double>> Z;
+    std::vector<ColContainer> Z;
 };
 
-template <typename CholType>
-inline SparseSymmetricInverseSolver<CholType>::SparseSymmetricInverseSolver(
-    const CholType &chol)
+template <typename CholType, typename ColContainer>
+inline SparseSymmetricInverseSolver<
+    CholType, ColContainer>::SparseSymmetricInverseSolver(const CholType &chol)
     : L(chol.matrixL())
     , d(chol.vectorD())
     , P(chol.permutationP())
@@ -35,8 +39,8 @@ inline SparseSymmetricInverseSolver<CholType>::SparseSymmetricInverseSolver(
 {
 }
 
-template <typename CholType>
-inline void SparseSymmetricInverseSolver<CholType>::compute()
+template <typename CholType, typename ColContainer>
+inline void SparseSymmetricInverseSolver<CholType, ColContainer>::compute()
 {
     int n = L.rows();
     Z[n - 1][n - 1] = 1.0 / d(n - 1);
@@ -69,12 +73,20 @@ inline void SparseSymmetricInverseSolver<CholType>::compute()
     }
 }
 
-template <typename CholType>
-inline double SparseSymmetricInverseSolver<CholType>::get(int i, int j) const
+template <typename CholType, typename ColContainer>
+inline double SparseSymmetricInverseSolver<CholType, ColContainer>::get(int i,
+                                                                        int j)
 {
     i = P.indices().coeff(i);
     j = P.indices().coeff(j);
 
+    return getInternal(i, j);
+}
+
+template <typename CholType, typename ColContainer>
+inline double
+SparseSymmetricInverseSolver<CholType, ColContainer>::getInternal(int i, int j)
+{
     if (i > j)
         std::swap(i, j);
 
@@ -88,8 +100,10 @@ inline double SparseSymmetricInverseSolver<CholType>::get(int i, int j) const
     for (; itL; ++itL)
     {
         int k = itL.row();
-        v -= L.coeff(i, k) * (j < k ? Z[j].at(k) : Z[k].at(j));
+        v -= L.coeff(i, k) * getInternal(j, k);
     }
+
+    Z[i].try_emplace(j, v);
     return v;
 }
 
