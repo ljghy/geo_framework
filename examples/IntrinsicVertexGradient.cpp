@@ -22,7 +22,6 @@ int main(int argc, char **argv)
 
     auto l = mesh.getEdgeLengthMatrix();
     auto oneRing = mesh.getVertexOneRingWithCenter();
-    auto oneRingMap = mesh.getVertexOneRingMapWithCenter();
     auto gradOps = intrinsicVertexGradientOperator(mesh, l);
 
     Eigen::VectorXcd gradPhi(mesh.nV());
