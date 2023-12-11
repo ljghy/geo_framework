@@ -11,4 +11,7 @@ void computeGradient(Mesh &mesh, const Eigen::VectorXd &phi,
 
 std::vector<Eigen::Matrix3d> gradientOperator(Mesh &mesh);
 
+std::vector<Eigen::VectorXcd>
+intrinsicVertexGradientOperator(Mesh &mesh, const Eigen::MatrixX3d &l);
+
 #endif

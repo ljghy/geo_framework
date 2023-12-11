@@ -6,6 +6,7 @@ set(EXAMPLES
     BasicViewer
     SubMesh
     LargestComponent
+    IntrinsicVertexGradient
 )
 
 find_package(opengl_framework REQUIRED)

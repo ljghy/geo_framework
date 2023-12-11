@@ -25,6 +25,7 @@ struct Vertex
     Eigen::Vector3d normal;
 
     double area;
+    double angleSum;
 
     bool onBoundary;
 

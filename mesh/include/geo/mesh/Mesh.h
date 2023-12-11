@@ -50,6 +50,8 @@ struct Mesh
 
         VertexIndices = 1 << 8,
         FaceIndices = 1 << 9,
+
+        VertexAngleSums = 1 << 10,
     };
 
     MeshBitFlag flags = 0;
@@ -72,6 +74,10 @@ struct Mesh
     void computeConnectionAngles();
     void setVertexIndices();
     void setFaceIndices();
+    void computeVertexAngleSums();
+
+    void computeIntrinsicFaceAngles(const Eigen::MatrixX3d &l);
+    void computeIntrinsicFaceAreas(const Eigen::MatrixX3d &l);
 
     Eigen::Matrix3Xd getVertexPositionMatrix() const;
     Eigen::MatrixX3d getVertexPositionMatrixTransposed() const;
@@ -81,6 +87,7 @@ struct Mesh
     Eigen::MatrixX3i getFMatrix() const;
     Eigen::Matrix3Xd getVertexNormalMatrix();
     Eigen::VectorXd getVertexMassVector();
+    Eigen::MatrixX3d getEdgeLengthMatrix() const;
 
     std::vector<std::vector<int>> getVertexOneRing();
     std::vector<std::vector<int>> getVertexOneRingWithCenter();

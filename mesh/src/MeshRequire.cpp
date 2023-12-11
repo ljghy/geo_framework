@@ -8,7 +8,7 @@ static RequireFunc requireFuncMap[]{
     &Mesh::computeVertexNormals,  &Mesh::computeVertexAreas,
     &Mesh::computeMeanEdgeLength, &Mesh::computeConnectionAngles,
     &Mesh::setVertexIndices,      &Mesh::setFaceIndices,
-};
+    &Mesh::computeVertexAngleSums};
 
 void Mesh::require(MeshBitFlag requiredFlags)
 {

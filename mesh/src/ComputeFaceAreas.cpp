@@ -14,3 +14,16 @@ void Mesh::computeFaceAreas()
 
     flags |= FaceAreas;
 }
+
+void Mesh::computeIntrinsicFaceAreas(const Eigen::MatrixX3d &l)
+{
+    for (auto &face : faces)
+    {
+        auto f = getFaceIndex(&face);
+        double p = 0.5 * (l(f, 0) + l(f, 1) + l(f, 2));
+        face.area =
+            std::sqrt(p * (p - l(f, 0)) * (p - l(f, 1)) * (p - l(f, 2)));
+    }
+
+    flags |= FaceAreas;
+}
