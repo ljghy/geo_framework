@@ -100,10 +100,10 @@ SparseSymmetricInverseSolver<CholType, ColContainer>::getInternal(int i, int j)
     for (; itL; ++itL)
     {
         int k = itL.row();
-        v -= L.coeff(i, k) * getInternal(j, k);
+        v -= itL.value() * getInternal(j, k);
     }
 
-    Z[i].try_emplace(j, v);
+    Z[i].emplace(j, v);
     return v;
 }
 
