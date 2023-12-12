@@ -8,13 +8,13 @@ int main(int argc, char **argv)
 {
     if (argc != 3)
     {
-        std::cout << "Usage: " << argv[0] << " mesh.vtk output.vtk"
+        std::cout << "Usage: " << argv[0] << " mesh output.vtk"
                   << std::endl;
         return 0;
     }
 
     Mesh mesh;
-    loadMeshFromVtk(argv[1], mesh);
+    loadMeshFromFile(argv[1], mesh);
 
     std::chrono::high_resolution_clock::time_point t1 =
         std::chrono::high_resolution_clock::now();

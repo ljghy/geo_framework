@@ -11,18 +11,18 @@
 
 void loadMeshFromFile(const std::string &filename, Mesh &mesh);
 
-void loadMeshFromFile(const std::string &filename, Eigen::Matrix3Xd &V,
-                      Eigen::Matrix3Xi &F);
+void loadMeshFromFile(const std::string &filename, Eigen::MatrixX3d &V,
+                      Eigen::MatrixX3i &F);
 
 void loadMeshFromVtk(const std::string &filename, Mesh &mesh);
 
-void loadMeshFromVtk(const std::string &filename, Eigen::Matrix3Xd &V,
-                     Eigen::Matrix3Xi &F);
+void loadMeshFromVtk(const std::string &filename, Eigen::MatrixX3d &V,
+                     Eigen::MatrixX3i &F);
 
 void loadMeshFromObj(const std::string &filename, Mesh &mesh);
 
-void loadMeshFromObj(const std::string &filename, Eigen::Matrix3Xd &V,
-                     Eigen::Matrix3Xi &F);
+void loadMeshFromObj(const std::string &filename, Eigen::MatrixX3d &V,
+                     Eigen::MatrixX3i &F);
 
 void loadVerticesFromObj(const std::string &filename,
                          Eigen::Matrix3Xd &vertices);

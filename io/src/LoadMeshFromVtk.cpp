@@ -44,8 +44,8 @@ void loadMeshFromVtk(const std::string &filename, Mesh &mesh)
     }
 }
 
-void loadMeshFromVtk(const std::string &filename, Eigen::Matrix3Xd &V,
-                     Eigen::Matrix3Xi &F)
+void loadMeshFromVtk(const std::string &filename, Eigen::MatrixX3d &V,
+                     Eigen::MatrixX3i &F)
 {
     std::ifstream fin(filename);
     if (!fin)
@@ -60,20 +60,20 @@ void loadMeshFromVtk(const std::string &filename, Eigen::Matrix3Xd &V,
     int nV;
     fin >> buffer >> nV >> buffer;
 
-    V.resize(3, nV);
+    V.resize(nV, 3);
     for (int i = 0; i < nV; ++i)
     {
-        fin >> V(0, i) >> V(1, i) >> V(2, i);
+        fin >> V(i, 0) >> V(i, 1) >> V(i, 2);
     }
 
     int nF, nI;
     fin >> buffer >> nF >> nI;
     assert(nI == 4 * nF);
 
-    F.resize(3, nF);
+    F.resize(nF, 3);
     for (int i = 0; i < nF; ++i)
     {
-        fin >> nI >> F(0, i) >> F(1, i) >> F(2, i);
+        fin >> nI >> F(i, 0) >> F(i, 1) >> F(i, 2);
         assert(nI == 3);
     }
 

@@ -45,8 +45,8 @@ void loadMeshFromObj(const std::string &filename, Mesh &mesh)
     }
 }
 
-void loadMeshFromObj(const std::string &filename, Eigen::Matrix3Xd &V,
-                     Eigen::Matrix3Xi &F)
+void loadMeshFromObj(const std::string &filename, Eigen::MatrixX3d &V,
+                     Eigen::MatrixX3i &F)
 {
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
@@ -65,16 +65,16 @@ void loadMeshFromObj(const std::string &filename, Eigen::Matrix3Xd &V,
     auto &indices = shapes[0].mesh.indices;
 
     size_t nV = attrib.vertices.size() / 3;
-    V.resize(3, nV);
+    V.resize(nV, 3);
 
     for (size_t i = 0; i < nV; ++i)
         for (int j = 0; j < 3; ++j)
-            V(j, i) = attrib.vertices[3 * i + j];
+            V(i, j) = attrib.vertices[3 * i + j];
 
     size_t nF = indices.size() / 3;
-    F.resize(3, nF);
+    F.resize(nF, 3);
 
     for (size_t i = 0; i < nF; ++i)
         for (int j = 0; j < 3; ++j)
-            F(j, i) = indices[3 * i + j].vertex_index;
+            F(i, j) = indices[3 * i + j].vertex_index;
 }

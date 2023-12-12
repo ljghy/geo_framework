@@ -15,8 +15,8 @@ void loadMeshFromFile(const std::string &filename, Mesh &mesh)
         throw std::runtime_error("Unknown file format");
 }
 
-void loadMeshFromFile(const std::string &filename, Eigen::Matrix3Xd &V,
-                      Eigen::Matrix3Xi &F)
+void loadMeshFromFile(const std::string &filename, Eigen::MatrixX3d &V,
+                      Eigen::MatrixX3i &F)
 {
     std::string_view ext(filename.begin() + filename.find_last_of(".") + 1,
                          filename.end());
