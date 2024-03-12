@@ -7,6 +7,7 @@ set(EXAMPLES
     SubMesh
     LargestComponent
     IntrinsicVertexGradient
+    MidpointSubdivision
 )
 
 find_package(opengl_framework REQUIRED)

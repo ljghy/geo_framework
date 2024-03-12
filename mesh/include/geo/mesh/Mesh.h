@@ -97,6 +97,16 @@ struct Mesh
     size_t nV() const { return vertices.size(); }
     size_t nF() const { return faces.size(); }
 
+    const Vertex &V(size_t i) const { return vertices[i]; }
+    const Face &F(size_t i) const { return faces[i]; }
+    Vertex &V(size_t i) { return vertices[i]; }
+    Face &F(size_t i) { return faces[i]; }
+
+    double V(size_t i, size_t j) const { return vertices[i].position(j); }
+    int F(size_t i, size_t j) const { return faces[i].indices(j); }
+    double &V(size_t i, size_t j) { return vertices[i].position(j); }
+    int &F(size_t i, size_t j) { return faces[i].indices(j); }
+
     size_t getVertexIndex(const Vertex *vertex) const
     {
         return vertex - vertices.data();

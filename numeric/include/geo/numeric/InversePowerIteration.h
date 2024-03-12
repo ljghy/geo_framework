@@ -5,8 +5,12 @@
 #include <Eigen/SparseCore>
 #include <Eigen/SparseCholesky>
 
+inline double realPart(double x) { return x; }
+
+inline double realPart(std::complex<double> x) { return x.real(); }
+
 template <unsigned int UpLo = Eigen::Lower, typename ScalarType>
-void hermitianInversePowerIteration(
+inline void hermitianInversePowerIteration(
     const Eigen::SparseMatrix<ScalarType> &A,
     Eigen::Vector<ScalarType, Eigen::Dynamic> *x = nullptr,
     double *lambda = nullptr,
@@ -26,7 +30,7 @@ void hermitianInversePowerIteration(
     for (int i = 0; i < maxIter; ++i)
     {
         Vec v = chol.solve(u);
-        lam = u.dot(v).real();
+        lam = realPart(u.dot(v));
         double vNorm = v.norm();
         if (std::abs(std::abs(lam) - vNorm) < tol)
             break;
@@ -34,7 +38,7 @@ void hermitianInversePowerIteration(
     }
 
     if (lambda != nullptr)
-        *lambda = lam;
+        *lambda = 1.0 / lam;
     if (x != nullptr)
         *x = u;
 }

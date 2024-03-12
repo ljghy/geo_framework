@@ -58,4 +58,8 @@ void writeCurveToVtk(const std::string &filename,
 void writeVerticesToVtk(const std::string &filename,
                         const std::vector<Eigen::Vector3d> &vertices);
 
+void writeVerticesScalarFieldToVtk(const std::string &filename,
+                                   const std::vector<Eigen::Vector3d> &vertices,
+                                   const Eigen::VectorXd &phi);
+
 #endif
