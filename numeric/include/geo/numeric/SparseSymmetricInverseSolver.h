@@ -17,58 +17,51 @@ public:
 
     void compute();
     double get(int i, int j);
-    int nnz() const { return L.nonZeros(); }
+    int nnz() const { return L_.nonZeros(); }
 
 private:
     double getInternal(int i, int j);
 
 private:
-    Eigen::SparseMatrix<double> L;
-    Eigen::VectorXd d;
-    Eigen::PermutationMatrix<Eigen::Dynamic> P;
-    std::vector<ColContainer> Z;
+    Eigen::SparseMatrix<double> L_;
+    Eigen::VectorXd d_;
+    Eigen::PermutationMatrix<Eigen::Dynamic> P_;
+    std::vector<ColContainer> Z_;
 };
 
 template <typename CholType, typename ColContainer>
 inline SparseSymmetricInverseSolver<
     CholType, ColContainer>::SparseSymmetricInverseSolver(const CholType &chol)
-    : L(chol.matrixL())
-    , d(chol.vectorD())
-    , P(chol.permutationP())
-    , Z(L.rows())
+    : L_(chol.matrixL())
+    , d_(chol.vectorD())
+    , P_(chol.permutationP())
+    , Z_(L_.rows())
 {
 }
 
 template <typename CholType, typename ColContainer>
 inline void SparseSymmetricInverseSolver<CholType, ColContainer>::compute()
 {
-    int n = L.rows();
-    Z[n - 1][n - 1] = 1.0 / d(n - 1);
+    int n = L_.rows();
+    Z_[n - 1][n - 1] = 1.0 / d_(n - 1);
 
     for (int i = n - 2; i >= 0; --i)
     {
-        std::vector<int> colNonZeros;
-        colNonZeros.reserve(L.col(i).nonZeros());
-        for (Eigen::SparseMatrix<double>::InnerIterator it(L, i); it; ++it)
+        for (auto rit = L_.outerIndexPtr()[i + 1] - 1;
+             rit >= L_.outerIndexPtr()[i]; --rit)
         {
-            colNonZeros.emplace_back(it.row());
-        }
+            int j = L_.innerIndexPtr()[rit];
+            double v = i == j ? 1.0 / d_(j) : 0.0;
 
-        for (auto rit = colNonZeros.crbegin(); rit != colNonZeros.crend();
-             ++rit)
-        {
-            int j = *rit;
-            double v = i == j ? 1.0 / d(j) : 0.0;
-
-            Eigen::SparseMatrix<double>::InnerIterator it(L, i);
+            Eigen::SparseMatrix<double>::InnerIterator it(L_, i);
             ++it;
             for (; it; ++it)
             {
                 int k = it.row();
-                v -= it.value() * (j < k ? Z[j].at(k) : Z[k].at(j));
+                v -= it.value() * (j < k ? Z_[j].at(k) : Z_[k].at(j));
             }
 
-            Z[i].emplace(j, v);
+            Z_[i].emplace(j, v);
         }
     }
 }
@@ -77,10 +70,7 @@ template <typename CholType, typename ColContainer>
 inline double SparseSymmetricInverseSolver<CholType, ColContainer>::get(int i,
                                                                         int j)
 {
-    i = P.indices().coeff(i);
-    j = P.indices().coeff(j);
-
-    return getInternal(i, j);
+    return getInternal(P_.indices().coeff(i), P_.indices().coeff(j));
 }
 
 template <typename CholType, typename ColContainer>
@@ -90,12 +80,12 @@ SparseSymmetricInverseSolver<CholType, ColContainer>::getInternal(int i, int j)
     if (i > j)
         std::swap(i, j);
 
-    auto it = Z[i].find(j);
-    if (it != Z[i].end())
+    auto it = Z_[i].find(j);
+    if (it != Z_[i].end())
         return it->second;
 
-    double v = i == j ? 1.0 / d(i) : 0.0;
-    Eigen::SparseMatrix<double>::InnerIterator itL(L, i);
+    double v = i == j ? 1.0 / d_(i) : 0.0;
+    Eigen::SparseMatrix<double>::InnerIterator itL(L_, i);
     ++itL;
     for (; itL; ++itL)
     {
@@ -103,7 +93,7 @@ SparseSymmetricInverseSolver<CholType, ColContainer>::getInternal(int i, int j)
         v -= itL.value() * getInternal(j, k);
     }
 
-    Z[i].emplace(j, v);
+    Z_[i].emplace(j, v);
     return v;
 }
 
