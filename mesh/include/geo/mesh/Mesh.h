@@ -94,6 +94,8 @@ struct Mesh
     std::vector<std::map<int, int>> getVertexOneRingMap();
     std::vector<std::map<int, int>> getVertexOneRingMapWithCenter();
 
+    std::vector<std::vector<int>> getVertexNRing(int n);
+
     size_t nV() const { return vertices.size(); }
     size_t nF() const { return faces.size(); }
 
